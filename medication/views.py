@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from .models import Medication
-from .forms import FormAddMedication
-from django.views.generic.edit import CreateView, DeleteView 
+from .forms import FormAddMedication , FormEditMedication
+from django.views.generic.edit import CreateView, DeleteView , UpdateView
 from django.views.generic.list import ListView
 from django.urls import reverse , reverse_lazy
 from django.http import Http404
@@ -46,5 +46,18 @@ class DeleteMedication(DeleteView):
         if not obj.user == self.request.user:
             raise Http404
         return obj
+
+class EditMedication(UpdateView):
+    model = Medication
+    form_class = FormEditMedication
+    template_name = 'medication/medication_edit.html'
+    sucess_url = reverse_lazy('medication_list')
+
+    def get_object(self):
+        medication_id = self.kwargs.get("pk")
+        return get_object_or_404(Medication, id=medication_id, user_id=self.request.user.id) 
+
+    def get_success_url(self):
+        return reverse('medication_list') 
           
      

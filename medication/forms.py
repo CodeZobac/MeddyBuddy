@@ -16,3 +16,9 @@ class FormAddMedication(forms.ModelForm):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+class FormEditMedication(forms.ModelForm):
+    class Meta:
+        model = Medication
+        fields = ("name", "dosage", "instructions" , 'user')
+
